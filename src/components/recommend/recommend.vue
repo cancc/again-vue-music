@@ -1,12 +1,12 @@
 <template>
   <div class="recommend">
-    <scroll class="recommend-content">
+    <scroll ref="scroll" class="recommend-content" :data="discList">
       <div>
         <div v-if="this.recommends.length" class="slider-wrapper">
           <slider>
             <div v-for="item in recommends" :key="item.id">
               <a :href="item.linkUrl">
-                <img :src="item.picUrl">
+                <img @load="loadImage" :src="item.picUrl">
               </a>
             </div>
           </slider>
@@ -16,7 +16,7 @@
           <ul>
             <li v-for="(item,index) in discList" class="item">
               <div class="icon">
-                <img :src="item.imgurl" width="60" height="60" >
+                <img v-lazy="item.imgurl" width="60" height="60" >
               </div>
               <div class="text">
                 <h2 class="name" v-html="item.creator.name"></h2>
@@ -24,6 +24,7 @@
               </div>
             </li>
           </ul>
+          <div class="loading-container" v-show="!discList.length">waiting...</div>
         </div>
       </div>
     </scroll>
@@ -46,12 +47,15 @@ export default {
     };
   },
   created() {
-    setTimeout(() => {
+    
       this._getRecommend()
-    },2000)
+  
     setTimeout(() => {
       this._getDiscList()
-    },1000)
+    },2000)
+    
+  },
+  mounted() {
     
   },
   methods: {
@@ -71,6 +75,13 @@ export default {
             this.discList = res.data.list
           }
         })
+      },
+      loadImage() {
+        
+        if(!this.checkLoaded) {
+          this.$refs.scroll.refresh()
+          this.checkLoaded = true
+        } 
       }
   },
   components: {
@@ -126,9 +137,9 @@ export default {
               color: $color-text
             .desc
               color: $color-text-d
-      .loading-container
-        position: absolute
-        width: 100%
-        top: 50%
-        transform: translateY(-50%)
+      // .loading-container
+      //   position: absolute
+      //   width: 100%
+      //   top: 50%
+      //   transform: translateY(-50%)
 </style>

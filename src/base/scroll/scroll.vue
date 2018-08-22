@@ -9,7 +9,7 @@ import BScroll from 'better-scroll'
 
 export default {
 	props: {
-
+		data: Array
 	},
 	data() {
 		return {
@@ -27,8 +27,18 @@ methods: {
 		return
 	}
 	this.scroll = new BScroll(this.$refs.wrapper, {
-
-	})
+			click: true
+		})
+	},
+	refresh() {
+		this.scroll && this.scroll.refresh()
+	}
+},
+watch: {
+	data() {
+		setTimeout(() => {
+			this.refersh()
+		}, 20)
 	}
 }
 
