@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+</head>
+<body>
+
+	<script type="text/javascript">
+	// 获得信息结果后的回调函数
+		function getData(res) {
+			console.log(res)
+		}
+		// jsonp的url地址，返回的是一段js代码
+		const url = "https://c.y.qq.com/musichall/fcgi-bin/fcg_yqqhomepagerecommend.fcg?g_tk=5381&uin=0&format=json&inCharset=utf-8&outCharset=utf-8&notice=0&platform=h5&needNewCode=1&jsonpCallback=getData";
+		// 创建script标签，设置src属性并将url添加进去
+		const script = document.createElement('script');
+		script.setAttribute('src', url);
+		// 把script标签加入head，调用
+		document.getElementsByTagName('head')[0].appendChild(script);
+		
+	</script>
+</body>
+
+</html>
