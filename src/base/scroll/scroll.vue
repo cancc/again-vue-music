@@ -1,0 +1,42 @@
+<template>
+	<div ref="wrapper">
+		<slot></slot>
+	</div>
+</template>
+
+<script type="text/ecmascript-6">
+import BScroll from 'better-scroll'
+
+export default {
+	props: {
+
+	},
+	data() {
+		return {
+
+		}
+	},
+mounted() {
+	setTimeout(() => {
+		this._initScroll()
+	},20)
+},
+methods: {
+	_initScroll() {
+		if(!this.$refs.wrapper) {
+		return
+	}
+	this.scroll = new BScroll(this.$refs.wrapper, {
+
+	})
+	}
+}
+
+
+
+}
+</script>
+
+<style lang="stylus" rel="stylesheet/stylus">
+
+</style>

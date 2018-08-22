@@ -1,34 +1,58 @@
 <template>
   <div class="recommend">
-    <div class="recommend-content">
-      <div v-if="this.recommends.length" class="slider-wrapper">
-        <slider>
-          <div v-for="item in recommends" :key="item.id">
-            <a :href="item.linkUrl">
-              <img :src="item.picUrl">
-            </a>
-          </div>
-        </slider>
+    <scroll class="recommend-content">
+      <div>
+        <div v-if="this.recommends.length" class="slider-wrapper">
+          <slider>
+            <div v-for="item in recommends" :key="item.id">
+              <a :href="item.linkUrl">
+                <img :src="item.picUrl">
+              </a>
+            </div>
+          </slider>
+        </div>
+        <div class="recommend-list">
+          <h1 class="list-title">热门歌单推荐</h1>
+          <ul>
+            <li v-for="(item,index) in discList" class="item">
+              <div class="icon">
+                <img :src="item.imgurl" width="60" height="60" >
+              </div>
+              <div class="text">
+                <h2 class="name" v-html="item.creator.name"></h2>
+                <p class="desc" v-html="item.dissname"></p>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
+    </scroll>
     
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-import axios from 'axios'
-import { getRecommend } from "api/recommend"
+import axios from "axios"
+import { getRecommend, getDiscList } from "api/recommend"
 import { ERR_OK } from "api/config"
 import Slider from "base/slider/slider"
+import Scroll from "base/scroll/scroll"
 
 export default {
   data() {
     return {
-      recommends: []
+      recommends: [],
+      discList:[]
     };
   },
   created() {
-    this._getRecommend();
+    setTimeout(() => {
+      this._getRecommend()
+    },2000)
+    setTimeout(() => {
+      this._getDiscList()
+    },1000)
+    
   },
   methods: {
     _getRecommend() {
@@ -40,30 +64,18 @@ export default {
       });
     },
 
-    _getData() {
-      axios.get('http://ustbhuangyi.com/music/api/getDiscList',{
-        params:{
-          g_tk:1928093487,
-          inCharset:'utf-8',
-          outCharset:'utf-8',
-          notice:0,
-          format:'json',
-          platform:'yqq',
-          hostUin:0,
-          sin:0,
-          ein:29,
-          sortId:5,
-          needNewCode:0,
-          categoryId:10000000,
-          rnd: Math.random()
-        }
-      }).then((res) => {
-        console.log(res)
-      })
-    }
+    _getDiscList() {
+        getDiscList().then((res) => {
+          console.log(res)
+          if(res.code === ERR_OK) {
+            this.discList = res.data.list
+          }
+        })
+      }
   },
   components: {
-    Slider
+    Slider,
+    Scroll
   }
 };
 </script>
