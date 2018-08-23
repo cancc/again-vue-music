@@ -37,7 +37,7 @@ methods: {
 watch: {
 	data() {
 		setTimeout(() => {
-			this.refersh()
+			this.refresh()
 		}, 20)
 	}
 }

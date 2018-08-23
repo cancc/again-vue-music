@@ -14,7 +14,7 @@
         <div class="recommend-list">
           <h1 class="list-title">热门歌单推荐</h1>
           <ul>
-            <li v-for="(item,index) in discList" class="item">
+            <li v-for="(item,index) in discList" :key="index" class="item">
               <div class="icon">
                 <img v-lazy="item.imgurl" width="60" height="60" >
               </div>
@@ -24,7 +24,9 @@
               </div>
             </li>
           </ul>
-          <div class="loading-container" v-show="!discList.length">waiting...</div>
+          <div class="loading-container" v-show="!discList.length">
+            <img src="../../common/image/loading.gif" alt="">
+          </div>
         </div>
       </div>
     </scroll>
