@@ -46,15 +46,13 @@ export default {
     return {
       recommends: [],
       discList:[]
-    };
+    }
   },
   created() {
     
-      this._getRecommend()
-  
-    setTimeout(() => {
-      this._getDiscList()
-    },2000)
+    this._getRecommend()
+    this._getDiscList()
+    
     
   },
   mounted() {

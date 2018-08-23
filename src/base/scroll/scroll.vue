@@ -9,38 +9,36 @@ import BScroll from 'better-scroll'
 
 export default {
 	props: {
-		data: Array
+		data: {
+			type: Array,
+			default: []
+		},
 	},
-	data() {
-		return {
-
+	mounted() {
+		setTimeout(() => {
+			this._initScroll()
+		},20)
+	},
+	methods: {
+		_initScroll() {
+			if(!this.$refs.wrapper) {
+			return
+		}
+		this.scroll = new BScroll(this.$refs.wrapper, {
+				click: true
+			})
+		},
+		refresh() {
+			this.scroll && this.scroll.refresh()
 		}
 	},
-mounted() {
-	setTimeout(() => {
-		this._initScroll()
-	},20)
-},
-methods: {
-	_initScroll() {
-		if(!this.$refs.wrapper) {
-		return
+	watch: {
+		data() {
+			setTimeout(() => {
+				this.refresh()
+			}, 20)
+		}
 	}
-	this.scroll = new BScroll(this.$refs.wrapper, {
-			click: true
-		})
-	},
-	refresh() {
-		this.scroll && this.scroll.refresh()
-	}
-},
-watch: {
-	data() {
-		setTimeout(() => {
-			this.refresh()
-		}, 20)
-	}
-}
 
 
 

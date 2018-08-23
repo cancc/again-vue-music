@@ -1,11 +1,14 @@
 <template>
-  <div>singer</div>
+  <div class="singer">
+    <list-view :data="singers"></list-view>
+  </div>
 </template>
 
 <script type="text/ecmascript-6">
-import { getSingerList } from "api/singer"
-import { ERR_OK } from "api/config"
-import Singer from 'common/js/singer.js'
+  import { getSingerList } from "api/singer"
+  import { ERR_OK } from "api/config"
+  import Singer from 'common/js/singer.js'
+  import ListView from 'base/listview/listview'
 
 export default {
   data() {
@@ -22,9 +25,9 @@ export default {
         console.log('歌手数据>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
         console.log(res)
         if(res.code === ERR_OK) {
-          this.singers = res.data.list
+          this.singers = this._normalizeSinger(res.data.list)
+          // console.log(this.singers)
           console.log(this.singers)
-          console.log(this._normalizeSinger(this.singers))
         }
       })
     },
@@ -74,6 +77,9 @@ export default {
       })
       return hot.concat(ret) 
     }
+  },
+  components: {
+    ListView
   }
 }
 
@@ -81,6 +87,10 @@ export default {
 
 </script>
 
-<style lang="stylus" rel="stylesheet/stylus">
-
+<style scoped lang="stylus" rel="stylesheet/stylus">
+.singer
+   position: absolute
+   top: 88px
+   bottom: 0
+   width: 100%
 </style>
