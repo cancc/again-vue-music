@@ -1,6 +1,7 @@
 <template>
   <div class="singer">
-    <list-view :data="singers"></list-view>
+    <list-view @select="selectSinger" :singers="singers"></list-view>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -76,6 +77,9 @@ export default {
         return a.title.charCodeAt(0) - b.title.charCodeAt(0)
       })
       return hot.concat(ret) 
+    },
+    selectSinger(singer) {
+      this.$router.push({path: `/singer/${singer.id}`})
     }
   },
   components: {
@@ -89,7 +93,7 @@ export default {
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
 .singer
-   position: absolute
+   position: fixed
    top: 88px
    bottom: 0
    width: 100%

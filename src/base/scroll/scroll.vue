@@ -30,6 +30,9 @@ export default {
 		},
 		refresh() {
 			this.scroll && this.scroll.refresh()
+		},
+		scrollToElement() {
+			this.scroll && this.scroll.scrollToElement.apply(this.scroll, arguments)
 		}
 	},
 	watch: {

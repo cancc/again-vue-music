@@ -1,32 +1,17 @@
 <template>
-		<scroll class="listview" :data="singers" ref="liseview">
-			<ul>
-				<li v-for="(group, index) in singers" ref="listgroup" :key="index" class="list-group">
-					<h2 class="list-group-title">{{group.title}}</h2>
-					<ul>
-						<li v-for="(item, index) in group.items" :key="index" @click="selectItem(item)" class="list-group-item">
-							<img class="avatar" v-lazy="item.avatar">
-							<span class="name">{{item.name}}</span>
-						</li>
-					</ul>
-				</li>
-			</ul>
-			<div class="list-shortcut">
-				<ul>
-					<li class="item" v-for="(item, index) in shortcutList" :key="index"
-						@click="handleClick(index)">
-						{{item}}
-					</li>
-				</ul>
-			</div>
-			<!-- <abc :singers="singers" @change="handleClick"></abc> -->
-		</scroll>
-		
+	
+    <div class="list-shortcut">
+        <ul>
+            <li class="item" v-for="(item, index) in shortcutList" :key="index"
+                @click="handleClick">
+                {{item}}
+            </li>
+        </ul>
+    </div>
 	
 </template>
 <script type="text/ecmascript-6">
 import Scroll from "base/scroll/scroll"
-// import Abc from 'base/abc/abc'
 	
 	export default {
 		props: {
@@ -45,32 +30,25 @@ import Scroll from "base/scroll/scroll"
 			}
 		},
 		methods: {
-			handleClick(index) {
-				console.log(index)
-				this.index = index
-				console.log(this.index)
-			},
-			selectItem(item) {
-				this.$emit('select', item)
-				// console.log(singer)
-				// this.$router.push({path: `/singer/${singer.id}`})
+			handleClick(e) {
+				this.emit('change', e.target.innerText)
+				// console.log(e.target)
 			}
 		},
 		mounted() {
 			
 		},
 		watch: {
-			index() {
-				if(this.index) {
-					const element = this.$refs.listgroup[this.index]
-					console.log(element)
-					this.$refs.liseview.scrollToElement(element,0)
-				}
-			}
+			// index() {
+			// 	if(this.index) {
+			// 		const element = this.$refs.listgroup[this.index]
+			// 		console.log(element)
+			// 		this.$refs.liseview.scrollToElement(element,0)
+			// 	}
+			// }
 		},
 		components: {
-			Scroll,
-			// Abc
+			Scroll
 		}
 	}
 </script>
