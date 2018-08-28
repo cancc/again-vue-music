@@ -65,6 +65,10 @@ import Scroll from "base/scroll/scroll"
 					const element = this.$refs.listgroup[this.index]
 					console.log(element)
 					this.$refs.liseview.scrollToElement(element,0)
+				}else{
+					const elementHot = this.$refs.listgroup[0]
+					console.log(elementHot)
+					this.$refs.liseview.scrollToElement(elementHot, 0)
 				}
 			}
 		},
