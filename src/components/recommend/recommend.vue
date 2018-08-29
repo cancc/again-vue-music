@@ -25,7 +25,7 @@
             </li>
           </ul>
           <div class="loading-container" v-show="!discList.length">
-            <img src="../../common/image/loading.gif" alt="">
+            loading...
           </div>
         </div>
       </div>
@@ -49,14 +49,8 @@ export default {
     }
   },
   created() {
-    
     this._getRecommend()
     this._getDiscList()
-    
-    
-  },
-  mounted() {
-    
   },
   methods: {
     _getRecommend() {
