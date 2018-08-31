@@ -22,6 +22,13 @@
           </div>  
         </div>
         <div class="bottom">
+          <div class="progress-wrapper">
+            <span class="time time-l">{{format(currentTime)}}</span>
+            <div class="progress-bar-wrapper">
+              <progress-bar :percent="percent" @changePercent="percentChange"></progress-bar>
+            </div>
+            <span class="time time-r">{{format(currentSong.duration)}}</span>
+          </div>
           <div class="operators">
             <div class="icon i-left">
               <i class="icon-sequence"></i>  
@@ -59,17 +66,20 @@
         </div>
       </div>
      </transition>
-    <audio ref="audio" :src="currentSong.url" @canplay="ready" @error="error" ></audio>
+    <audio ref="audio" :src="currentSong.url" @canplay="ready" @error="error"
+    @timeupdate="updateTime" ></audio>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 import {mapGetters, mapMutations} from 'vuex'
+import ProgressBar from 'base/progress-bar/progress-bar'
 
 export default {
   data() {
     return {
-      songReady: false
+      songReady: false,
+      currentTime: 0
     }
   },
   computed: {
@@ -82,6 +92,9 @@ export default {
     disableCls() {
       return this.songReady? '' : 'disable'
     },
+    percent() {
+      return this.currentTime / this.currentSong.duration
+    },
     ...mapGetters([
       'playlist',
       'fullScreen',
@@ -91,12 +104,15 @@ export default {
     ])
   },
   methods: {
+    // 返回按钮
     back() {
       this.setFullScreen(false)
     },
+    // 点击mini播放器 展开
     open() {
       this.setFullScreen(true)
     },
+    // 上一首
     prev() {
       if(!this.songReady) {
         return
@@ -111,6 +127,7 @@ export default {
       } 
        this.songReady = false
     },
+    // 下一首
     next() {
       if(!this.songReady) {
         return
@@ -125,18 +142,48 @@ export default {
       }
       this.songReady = false
     },
+    // 播放/暂停
     togglePlaying() {
       if(!this.songReady) {
         return
       }
       this.setPlayingState(!this.playing)
     },
+    // audio url正确时
     ready() {
       this.songReady = true
     },
+    // 错误时
     error() {
       this.songReady = true
     },
+    // 当前时间
+    updateTime(e) {
+      this.currentTime = e.target.currentTime
+    },
+    // 格式化当前的时间格式
+    format(Time) {
+      // 整数向下取整
+      Time = Time | 0
+      const minute = Time/60 | 0
+      const second = this._pad(Time%60, 2)
+      return `${minute}:${second}`
+    },
+    _pad(num, n) {
+      let len = num.toString().length
+      if(len<n) {
+        return '0'+ num
+        len++
+      }
+      return num
+    },
+    percentChange(percent) {
+      this.$refs.audio.currentTime = this.currentSong.duration * percent
+      if(!this.playing) {
+        this.setPlayingState(true)
+      }
+    },
+    // 映射状态函数，改变时可直接调用
     ...mapMutations({
       setFullScreen: 'SET_FULL_SCREEN',
       setPlayingState: 'SET_PLAYING_STATE',
@@ -144,18 +191,22 @@ export default {
     })
   },
   watch: {
+    // 当前歌曲播放
     currentSong() {
       this.$nextTick(() => {
         this.$refs.audio.play()
       })
     },
+    // 正在播放时点击上一首或者下一首的时候改变icon样式
     playing(newPlaying) {
       const audio = this.$refs.audio
       this.$nextTick(() => {
       newPlaying? audio.play() : audio.pause()
       })
     }
-
+  },
+  components: {
+    ProgressBar
   }
 }
 
